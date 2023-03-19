@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
     'rest_framework_simplejwt',
     'ckeditor',
+    'phonenumber_field'
 ]
 
 LOCAL_APPS = [
@@ -56,7 +57,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-
+AUTH_USER_MODEL = 'account.Account'
+LOCAL_BASE_URL = 'http://127.0.0.1:8000'
+PROD_BASE_URL = 'https://uzchess.uz'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -90,7 +93,8 @@ DATABASES = {
     }
 }
 
-
+CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
+# AUTH_USER_MODEL = 'account.Account'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -133,7 +137,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+
 
 auth_list = [
     'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -202,3 +206,5 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
