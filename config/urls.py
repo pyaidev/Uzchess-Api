@@ -11,7 +11,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-
 schema_view = get_schema_view(
     openapi.Info(
         title="Uzchess API Docs",
@@ -25,7 +24,6 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -33,7 +31,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('account/', include('apps.account.api.urls'))
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('account/', include('apps.account.api.urls')),
+    path('news/', include('apps.news.api.urls'))
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

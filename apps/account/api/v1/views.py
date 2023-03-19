@@ -27,8 +27,14 @@ class LoginAPIView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
-        return Response({'success': False, 'message': 'Credentials is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': True,
+                             'response': 201,
+                             'data': serializer.data
+                             }, status=status.HTTP_200_OK)
+        return Response({'success': False,
+                         'response': 400,
+                         'message': 'Credentials is not valid'},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountListAPIView(generics.ListAPIView):
