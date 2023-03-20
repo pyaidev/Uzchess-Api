@@ -21,7 +21,7 @@ class NewArticle(BaseModel):
 
     @property
     def get_same_news(self):
-        news = NewArticle.objects.filter(title__startswith=self.title).values()
+        news = NewArticle.objects.filter(created=self.created).values()
         return list(news)
 
     class Meta:
