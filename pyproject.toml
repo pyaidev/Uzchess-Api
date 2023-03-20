@@ -1,0 +1,10 @@
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+default_section = "THIRDPARTY"
+known_third_party = []
+known_first_party = []
+known_django = "django"
+sections = "FUTURE,STDLIB,THIRDPARTY,DJANGO,LOCALFOLDER,FIRSTPARTY"
+skip = "migrations"

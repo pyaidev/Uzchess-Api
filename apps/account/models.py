@@ -10,6 +10,7 @@ from apps.common.models import BaseModel
 
 from .choosen import GENDER
 
+
 class AccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, phone_number, password=None, **extra_fields):
         user = self.model(
@@ -65,8 +66,8 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
-        verbose_name = 'Account'
-        verbose_name_plural = 'Accounts'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return self.first_name
@@ -103,4 +104,4 @@ class UserProfile(BaseModel):
         verbose_name_plural = 'User profiles'
 
     def __str__(self):
-        return self.user.name
+        return self.user.first_name

@@ -19,32 +19,35 @@ DEBUG = os.environ.get('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 
+DJANGO_APPS = [
+    "jazzmin",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+]
+
+CUSTOM_APPS = [
+    "apps.account",
+    "apps.common",
+    "apps.course",
+    "apps.news",
+    "apps.library",
+    "apps.payment",
+    "apps.main"
+]
 THIRD_PARTY_APPS = [
-    'jazzmin',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'drf_yasg',
-    'rest_framework_simplejwt',
-    'ckeditor',
-    'phonenumber_field'
+    "rest_framework",
+    "drf_yasg",
+    "rest_framework_simplejwt",
+    "ckeditor",
+    "ckeditor_uploader",
 ]
 
-LOCAL_APPS = [
-    'apps.account',
-    'apps.common',
-    'apps.course',
-    'apps.library',
-    'apps.main',
-    'apps.news',
-    'apps.payment',
-]
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
-INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
