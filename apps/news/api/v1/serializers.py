@@ -18,5 +18,5 @@ class DetailNewModelSerializer(ModelSerializer):
         fields = (
             'id', 'title', 'image',
             'created', 'description',
-            'view'
+            'view', 'get_same_news'
         )

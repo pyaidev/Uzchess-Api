@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView, RetrieveAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
@@ -7,6 +9,8 @@ from apps.news.models import NewArticle, NewArticleView
 
 class ListNewAPIView(ListAPIView):
     queryset = NewArticle.objects.all().order_by('-created_at')
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    search_fields = ('id', 'title', 'description')
     serializer_class = ListNewModelSerializer
     permission_classes = (IsAuthenticated,)
 

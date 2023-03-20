@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import CharField, IntegerField, ForeignKey, SET_NULL, CASCADE, ImageField, DateField, SlugField, \
     TextField
+from django.utils import timezone
 from django.utils.text import gettext_lazy as _, slugify
 
 from apps.common.models import BaseModel
@@ -9,7 +10,7 @@ from apps.common.models import BaseModel
 
 class NewArticle(BaseModel):
     title = CharField(max_length=255)
-    slug = SlugField(unique=True)
+    slug = SlugField(max_length=255, unique=True)
     image = ImageField(upload_to='news/photos/%Y/%m/%d')
     created = DateField(auto_now_add=True)
     description = RichTextUploadingField(config_name='portal_config')
@@ -20,8 +21,8 @@ class NewArticle(BaseModel):
 
     @property
     def get_same_news(self):
-        news = NewArticle.objects.filter(title__startswith=self.title)
-        return news
+        news = NewArticle.objects.filter(title__startswith=self.title).values()
+        return list(news)
 
     class Meta:
         verbose_name = 'NewArticle'

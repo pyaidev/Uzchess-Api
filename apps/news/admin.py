@@ -15,16 +15,15 @@ class NewArticleModelAdmin(ModelAdmin):
 
 @admin.register(NewArticleView)
 class NewArticleViewModelAdmin(ModelAdmin):
-    list_display = ('id', 'new_view_id', 'new_view_view', 'user_username', 'device_id')
-    search_fields = ('user_username', 'device_id')
+    list_display = ('id', 'new_id', 'new', 'user_username', 'device_id')
 
     def new_view_id(self, obj):
-        return obj.new_view.id
+        return obj.new.id
 
     new_view_id.short_description = 'NewView'
 
     def new_view_view(self, obj):
-        return obj.new_view.view
+        return obj.new.view
 
     new_view_view.short_description = 'NewView'
 
