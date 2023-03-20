@@ -18,33 +18,36 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
+
+DJANGO_APPS = [
+    "jazzmin",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+]
+
+CUSTOM_APPS = [
+    "apps.account",
+    "apps.common",
+    "apps.course",
+    "apps.news",
+    "apps.library",
+    "apps.payment",
+    "apps.main"
+]
 THIRD_PARTY_APPS = [
-    'jazzmin',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'drf_yasg',
-    'rest_framework_simplejwt',
-    'ckeditor',
-    'ckeditor_uploader',
-    'phonenumber_field'
+    "rest_framework",
+    "drf_yasg",
+    "rest_framework_simplejwt",
+    "ckeditor",
+    "ckeditor_uploader",
 ]
 
-LOCAL_APPS = [
-    'apps.account',
-    'apps.common',
-    'apps.course',
-    'apps.library',
-    'apps.main',
-    'apps.news',
-    'apps.payment',
-]
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
-INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -110,6 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -171,7 +175,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
-    'UPDATE_LAST_LOGIN': False,
+    'UPDATE_LAST_LOGIN': True,
 
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
