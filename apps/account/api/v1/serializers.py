@@ -10,15 +10,10 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6, max_length=128, write_only=True)
     password2 = serializers.CharField(min_length=6, max_length=128, write_only=True)
 
+
     class Meta:
         model = Account
-        fields = ('id',
-                  'first_name',
-                  'last_name',
-                  'phone_number',
-                  'password',
-                  'password2',
-                  )
+        fields = ['email', 'first_name', 'password', 'password2']
 
     def validate(self, attrs):
         password = attrs.get('password')
@@ -29,9 +24,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        del validated_data['password2']
         return Account.objects.create_user(**validated_data)
 
+
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=555)
+
+    class Meta:
+        model = Account
+        fields = ['token']
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, required=True)

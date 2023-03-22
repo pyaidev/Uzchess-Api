@@ -15,11 +15,10 @@ from ..course.models import Course, CourseLesson
 
 
 class AccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, phone_number, password=None, **extra_fields):
+    def create_user(self, first_name, email, password=None, **extra_fields):
         user = self.model(
-            phone_number=phone_number,
             first_name=first_name,
-            last_name=last_name
+            email=email,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -48,9 +47,9 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     username = models.CharField(
         max_length=255, blank=True, null=True, unique=True, verbose_name='Phone',
     )
-    phone_number = PhoneNumberField(region='UZ', unique=True, verbose_name='Phone number')
+    phone_number = PhoneNumberField(region='UZ',  verbose_name='Phone number')
     email = models.EmailField(
-        max_length=255, blank=True, null=True, verbose_name='Email',
+        max_length=255, blank=True, null=True, unique=True, verbose_name='Email',
     )
     email_is_verified = models.BooleanField(
         default=False, verbose_name='Email is verified',
@@ -65,7 +64,7 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'phone_number'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
