@@ -135,10 +135,6 @@ class VideoSingleView(generics.RetrieveAPIView):
         return Response("You are not buy this course")
 
 
-class CompletedCourseCreateAPIView(generics.CreateAPIView):
-    serializer_class = CompletedCourseSerializer
-
-
 class CourseCommentListAPIView(generics.ListAPIView):
     queryset = CourseComment.objects.all()
     serializer_class = CourseCommentSerializer

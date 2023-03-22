@@ -83,30 +83,6 @@ class CourseLessonSerializer(serializers.ModelSerializer):
         return representation
 
 
-class CourseRetrieveSerializer(serializers.ModelSerializer):
-    category_id = serializers.StringRelatedField()
-    sections = serializers.DictField(read_only=True)
-
-    class Meta:
-        model = Course
-        fields = ('id', 'title', 'category_id', 'description', 'demo_video', 'author', 'sections')
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-
-        sections = CourseLesson.objects.filter(course_id=instance)
-
-        if sections.exists():
-            serializer = CourseVideoSerializer(sections, many=True)
-            representation['sections'] = serializer.data
-
-        if sections.filter(~Q(section_type='Reviewed')).exists():
-            print('bingo')
-        else:
-            CourseCompleted.objects.create(user_id=self.context['request'].user, course_id=instance)
-
-        return representation
-
 class CompletedCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseCompleted
