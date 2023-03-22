@@ -10,7 +10,8 @@ from mutagen.mp4 import MP4, MP4StreamInfoError
 from helpers.utils import get_timer
 
 
-class CourseCategory(BaseModel):
+
+class Category(BaseModel):
     name = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(unique=True, blank=True)
 
@@ -27,7 +28,7 @@ class Course(BaseModel):
     author = models.CharField('Author', max_length=150)
     price = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     slug = models.SlugField(unique=True, blank=True)
-    category = models.ForeignKey(CourseCategory, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     language = models.CharField(max_length=60)
     is_discount = models.BooleanField('Chegirma', default=False)
     discount_price = models.DecimalField('Chegirmadagi narxi', max_digits=12, decimal_places=2, blank=True, null=True)
@@ -56,6 +57,7 @@ class CourseLesson(BaseModel):
     slug = models.SlugField(unique=True, blank=True)
     video_count = models.PositiveIntegerField(default=0)
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title[:20])
@@ -73,9 +75,6 @@ class CourseVideo(BaseModel):
     length = models.DecimalField(default=0, max_digits=100, decimal_places=2, blank=True, null=True,
                                  help_text='Video uzunligi ozi yozadi yozmasangiz  bo\'ladi')
     is_viewed = models.BooleanField(default=False)
-    useful_files = models.FileField(blank=True, null=True, upload_to='media/useful_materials')
-    useful_links = models.URLField(blank=True, null=True)
-    useful_images = models.ImageField(upload_to='media/useful_materials', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -108,20 +107,20 @@ class CourseVideo(BaseModel):
         return super().save(*args, **kwargs)
 
 
-class PurchaseCourse(BaseModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    user = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+class CourseViewed(BaseModel):
+    user_id = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    video_id = models.ForeignKey(CourseVideo, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.course.title
+        return self.video_id.title
 
     class Meta:
-        verbose_name = 'Purchase Course'
-        verbose_name_plural = 'Purchase Courses'
+        verbose_name = 'Course Viewed'
+        verbose_name_plural = 'Courses Viewed'
 
 
 class CourseCompleted(BaseModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey('account.PurchasedCourse', on_delete=models.CASCADE)
     user = models.ForeignKey('account.Account', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -143,3 +142,26 @@ class CourseComment(BaseModel):
 
     def __str__(self):
         return self.course.course.title
+
+
+class Certificate(BaseModel):
+    user = models.ForeignKey(
+        'account.Account', on_delete=models.CASCADE, related_name='certificates',
+    )
+    course = models.ForeignKey(
+        'course.Course', on_delete=models.CASCADE, related_name='certificates',
+    )
+    # cid = models.CharField(max_length=255, default=randomize_certificate_number)
+    certificate_url = models.CharField(max_length=255, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.certificate_url = f'/home/nurmuhammad/uic/uzchess/static/certicats/{self.user}-{self.course.title}.jpg'
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Certificate'
+        verbose_name_plural = 'Certificates'
+
+    def __str__(self):
+        return self.user.first_name
+

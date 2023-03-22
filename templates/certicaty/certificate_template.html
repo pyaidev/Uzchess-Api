@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Congratulations!</title>
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			padding: 50px;
+		}
+		h1 {
+			font-size: 32px;
+			margin-bottom: 20px;
+		}
+		p {
+			font-size: 18px;
+			line-height: 1.5;
+			margin-bottom: 20px;
+		}
+		.signature {
+			display: inline-block;
+			padding: 10px;
+			border: 1px solid black;
+			margin-top: 50px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Congratulations!</h1>
+	<p>Hello {{ user }} {{ course }},</p>
+	<p>You have successfully completed the "{{ course.name }}" course!</p>
+	<div class="signature">
+		<p>Organization signature</p>
+	</div>
+</body>
+</html>

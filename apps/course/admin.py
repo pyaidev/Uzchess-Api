@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import Course, CourseLesson, CourseVideo, CourseCategory, PurchaseCourse, CourseCompleted, CourseComment
+from .models import Course, CourseLesson, CourseVideo, Category, CourseCompleted, CourseComment, Certificate
 
 
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'price', 'is_discount', 'discount_price', 'language',)
+    list_display = ('id', 'title', 'author', 'price', 'is_discount', 'discount_price', 'language',)
     list_filter = ('title', 'author', 'price', 'is_discount', 'discount_price',)
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'author', 'price', 'is_discount', 'discount_price',)
@@ -35,7 +35,7 @@ class CourseCategoryAdmin(admin.ModelAdmin):
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseLesson, CourseLessonAdmin)
 admin.site.register(CourseVideo, CourseVideoAdmin)
-admin.site.register(CourseCategory, CourseCategoryAdmin)
-admin.site.register(PurchaseCourse)
+admin.site.register(Category, CourseCategoryAdmin)
 admin.site.register(CourseCompleted)
 admin.site.register(CourseComment)
+admin.site.register(Certificate)

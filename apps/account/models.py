@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from apps.common.models import BaseModel
 
 from .choosen import GENDER
+from ..course.models import Course
 
 
 class AccountManager(BaseUserManager):
@@ -105,3 +106,19 @@ class UserProfile(BaseModel):
 
     def __str__(self):
         return self.user.first_name
+
+
+class PurchasedCourse(BaseModel):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    lessons_video_count = models.PositiveIntegerField(default=0)
+    viewed_video_count = models.PositiveIntegerField(default=0)
+    is_finished = models.BooleanField(default=True)
+    def __str__(self):
+        return self.course.title
+
+
+
+    class Meta:
+        verbose_name = 'Purchase Course'
+        verbose_name_plural = 'Purchase Courses'

@@ -96,6 +96,13 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'db.sqlite3',
+#     }
+# }
+
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 # AUTH_USER_MODEL = 'account.Account'
 AUTH_PASSWORD_VALIDATORS = [
