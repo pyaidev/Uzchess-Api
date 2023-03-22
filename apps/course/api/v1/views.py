@@ -14,7 +14,6 @@ from .serializers import CourseVideoSerializer
 from .serializers import CourseLessonSerializer
 from .serializers import CourseCommentSerializer
 from .serializers import CompletedCourseSerializer
-from .serializers import CourseRetrieveSerializer
 
 
 
@@ -59,6 +58,48 @@ class CourseListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = CourseListSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class CourseLessonsView(generics.ListAPIView):
+    serializer_class = CourseLessonSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        course_id = self.kwargs['id']
+        if course_id:
+            queryset = CourseLesson.objects.filter(course__id=course_id)
+        else:
+            queryset = CourseLesson.objects.none()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+
+        queryset = self.get_queryset()
+        serializer = CourseLessonSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class LessonVideoListView(generics.ListAPIView):
+    queryset = CourseVideo.objects.all()
+    serializer_class = CourseVideoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        lesson_id = self.kwargs['id']
+
+        if lesson_id:
+            queryset = CourseVideo.objects.filter(course=lesson_id)
+        else:
+            queryset = CourseVideo.objects.none()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = CourseVideoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 
 
 class VideoSingleView(generics.RetrieveAPIView):

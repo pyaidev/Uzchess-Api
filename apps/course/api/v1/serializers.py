@@ -59,20 +59,20 @@ class CourseLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseLesson
         fields = (
-            'section_title', 'section_number', 'section_type', 'is_public', 'course_id', 'lesson_length_time',
+            'title', 'order', 'lesson_status','course_id', 'lesson_length_time',
             'videos')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
-        total_length = CourseVideo.objects.filter(section_id=instance).aggregate(Sum('length'))['length__sum']
+        total_length = CourseVideo.objects.filter(course=instance).aggregate(Sum('length'))['length__sum']
 
         if total_length == None:
             total_length = 0
 
         section_length_time = get_timer(total_length)
 
-        episodes = CourseVideo.objects.filter(section_id=instance)
+        episodes = CourseVideo.objects.filter(course=instance)
 
         if episodes.exists():
             serializer = CourseVideoSerializer(episodes, many=True)
