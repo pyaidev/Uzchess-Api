@@ -45,6 +45,8 @@ def certificaty(name, course):
     return f"/home/nurmuhammad/uic/uzchess/static/certicats/{name}-{course}.jpg"
 
 
+
+
 # def randomize_certificate_number():
 #     from apps.course.models import Certificate
 #

@@ -3,13 +3,15 @@ from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
 from django.db import models
+from django.db.models import Sum
+from django.db.models.signals import pre_save
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.common.models import BaseModel
 
 from .choosen import GENDER
-from ..course.models import Course
+from ..course.models import Course, CourseLesson
 
 
 class AccountManager(BaseUserManager):
@@ -122,3 +124,11 @@ class PurchasedCourse(BaseModel):
     class Meta:
         verbose_name = 'Purchase Course'
         verbose_name_plural = 'Purchase Courses'
+
+def purchase_course_post_save(instance, sender, *args, **kwargs):
+    if instance is not None:
+        obj = CourseLesson.objects.filter(course__id = instance.course.id).aggregate(Sum('video_count'))
+        instance.lessons_video_count = obj.get('video_count__sum')
+
+
+pre_save.connect(purchase_course_post_save, sender=PurchasedCourse)

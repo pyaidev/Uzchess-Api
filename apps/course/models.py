@@ -10,7 +10,6 @@ from mutagen.mp4 import MP4, MP4StreamInfoError
 from helpers.utils import get_timer
 
 
-
 class Category(BaseModel):
     name = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(unique=True, blank=True)
