@@ -56,9 +56,7 @@ THIRD_PARTY_APPS = [
 
 ]
 
-
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -165,7 +163,6 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 PASSWORD_RESET_TIMEOUT = os.environ.get('PASSWORD_RESET_TIMEOUT')
-
 
 auth_list = [
     'rest_framework_simplejwt.authentication.JWTAuthentication',
