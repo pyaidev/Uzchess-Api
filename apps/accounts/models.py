@@ -35,6 +35,9 @@ class AccountManager(BaseUserManager):
         return user
 
 
+AUTH_PROVIDERS = {'google': 'google', 'email': 'email'}
+
+
 class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     """ Account model """
     first_name = models.CharField(
@@ -47,7 +50,7 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     username = models.CharField(
         max_length=255, blank=True, null=True, unique=True, verbose_name='Phone',
     )
-    phone_number = PhoneNumberField(region='UZ',  verbose_name='Phone number')
+    phone_number = PhoneNumberField(region='UZ', verbose_name='Phone number')
     email = models.EmailField(
         max_length=255, blank=True, null=True, unique=True, verbose_name='Email',
     )
@@ -61,6 +64,9 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     date_created = models.DateTimeField(
         auto_now_add=True, verbose_name='Date created',
     )
+    auth_provider = models.CharField(
+        max_length=255, blank=False,
+        null=False, default=AUTH_PROVIDERS.get('email'))
 
     objects = AccountManager()
 
@@ -111,22 +117,22 @@ class UserProfile(BaseModel):
 
 class PurchasedCourse(BaseModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    user = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Account', on_delete=models.CASCADE)
     lessons_video_count = models.PositiveIntegerField(default=0)
     viewed_video_count = models.PositiveIntegerField(default=0)
     is_finished = models.BooleanField(default=True)
+
     def __str__(self):
         return self.course.title
-
-
 
     class Meta:
         verbose_name = 'Purchase Course'
         verbose_name_plural = 'Purchase Courses'
 
+
 def purchase_course_post_save(instance, sender, *args, **kwargs):
     if instance is not None:
-        obj = CourseLesson.objects.filter(course__id = instance.course.id).aggregate(Sum('video_count'))
+        obj = CourseLesson.objects.filter(course__id=instance.course.id).aggregate(Sum('video_count'))
         instance.lessons_video_count = obj.get('video_count__sum')
 
 

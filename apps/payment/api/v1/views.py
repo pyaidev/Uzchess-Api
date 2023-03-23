@@ -2,7 +2,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from apps.payment.api.v1.serializers import PaymentSerializer
 from apps.payment.models import Payment
-from apps.account.models import PurchasedCourse
+from apps.accounts.models import PurchasedCourse
 
 
 class PaymentCreateView(CreateAPIView):
