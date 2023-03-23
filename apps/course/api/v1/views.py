@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, status
 
-from apps.account.models import PurchasedCourse
+from apps.accounts.models import PurchasedCourse
 from apps.course.models import Course, CourseLesson, CourseVideo, Category, CourseCompleted, \
     CourseComment, CourseViewed, Certificate
 from helpers.utils import certificaty

@@ -10,7 +10,7 @@ from apps.common.models import BaseModel
 
 class Payment(BaseModel):
     user = models.ForeignKey(
-        'account.Account', on_delete=models.CASCADE, verbose_name='User',
+        'accounts.Account', on_delete=models.CASCADE, verbose_name='User',
     )
     course = models.ForeignKey(
         'course.Course', on_delete=models.CASCADE, verbose_name='Course',

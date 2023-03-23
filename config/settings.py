@@ -31,13 +31,14 @@ DJANGO_APPS = [
 ]
 
 CUSTOM_APPS = [
-    "apps.account",
+    "apps.accounts",
     "apps.common",
     "apps.course",
     "apps.news",
     "apps.library",
     "apps.payment",
-    "apps.main"
+    "apps.main",
+    "apps.social_auth"
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -46,8 +47,8 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "ckeditor",
     "ckeditor_uploader",
-    "djoser",
 ]
+
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -63,7 +64,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-AUTH_USER_MODEL = 'account.Account'
+AUTH_USER_MODEL = 'accounts.Account'
 LOCAL_BASE_URL = 'http://127.0.0.1:8000'
 PROD_BASE_URL = 'https://uzchess.uz'
 TEMPLATES = [
@@ -77,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -117,8 +119,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 
-# Internationalization
+]
+
+    # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -224,3 +231,31 @@ SIMPLE_JWT = {
 }
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+            'secret': os.environ.get('GOOGLE_SECRET_KEY'),
+            'key': ''
+        }
+    }
+}
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)

@@ -107,7 +107,7 @@ class CourseVideo(BaseModel):
 
 
 class CourseViewed(BaseModel):
-    user_id = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.Account', on_delete=models.CASCADE)
     video_id = models.ForeignKey(CourseVideo, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -119,8 +119,8 @@ class CourseViewed(BaseModel):
 
 
 class CourseCompleted(BaseModel):
-    course = models.ForeignKey('account.PurchasedCourse', on_delete=models.CASCADE)
-    user = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    course = models.ForeignKey('accounts.PurchasedCourse', on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Account', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.course.title
@@ -145,7 +145,7 @@ class CourseComment(BaseModel):
 
 class Certificate(BaseModel):
     user = models.ForeignKey(
-        'account.Account', on_delete=models.CASCADE, related_name='certificates',
+        'accounts.Account', on_delete=models.CASCADE, related_name='certificates',
     )
     course = models.ForeignKey(
         'course.Course', on_delete=models.CASCADE, related_name='certificates',
