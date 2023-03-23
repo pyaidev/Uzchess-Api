@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.account.api.v1.serializers import AccountSerializer
-from apps.account.models import Account
+from apps.accounts.api.v1.serializers import AccountSerializer
+from apps.accounts.models import Account
 from apps.library.models import Book, Category, Wishlist
 
 

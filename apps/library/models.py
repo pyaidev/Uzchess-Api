@@ -6,7 +6,7 @@ from django.db.models import CharField, SlugField, ForeignKey, CASCADE, IntegerF
     DateField, FloatField, ImageField, Avg, ManyToManyField, SET_NULL, EmailField
 from phonenumber_field.modelfields import PhoneNumberField
 import random
-from apps.account.models import Account
+# from apps.account.models import Account
 from apps.common.models import BaseModel
 from apps.library.choices import LanguageChoices, LevelChoices, StatusChoices
 
@@ -26,7 +26,7 @@ class Category(BaseModel):
 class Book(BaseModel):
     title = CharField(max_length=255)
     slug = SlugField(max_length=255, unique=True)
-    author = ForeignKey('account.Account', limit_choices_to={'is_author': True}, on_delete=CASCADE)
+    author = ForeignKey('accounts.Account', limit_choices_to={'is_author': True}, on_delete=CASCADE)
     image = ImageField(upload_to='books/%Y/%m/%d')
     category = ForeignKey('library.Category', CASCADE)
     number_of_pages = IntegerField(default=0)
@@ -72,7 +72,7 @@ class PromoCode(BaseModel):
 
 
 class Wishlist(models.Model):
-    user = ForeignKey('account.Account', on_delete=models.CASCADE)
+    user = ForeignKey('accounts.Account', on_delete=models.CASCADE)
     book = models.ForeignKey('library.Book', on_delete=models.CASCADE)
 
     def __str__(self):

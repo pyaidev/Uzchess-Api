@@ -37,7 +37,7 @@ class NewArticleView(BaseModel):
         related_name="new_views",
     )
     user = ForeignKey(
-        "account.Account",
+        "accounts.Account",
         verbose_name=_("User"),
         on_delete=CASCADE,
         related_name="user_views",
