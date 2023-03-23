@@ -29,7 +29,7 @@ class AccountRegisterAPIView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         current_site = get_current_site(request).domain
         relativeLink = reverse('verify-email')
-        absurl = 'http://' + current_site+relativeLink+"?token="+str(token)
+        absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
         print(absurl)
         email_body = absurl
         data = {'email_body': email_body, 'to_email': user.email,
@@ -37,6 +37,7 @@ class AccountRegisterAPIView(generics.GenericAPIView):
 
         Util.send_email(data)
         return Response(user_data, status=status.HTTP_201_CREATED)
+
 
 class VerifyEmail(views.APIView):
     serializer_class = EmailVerificationSerializer
@@ -59,6 +60,7 @@ class VerifyEmail(views.APIView):
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class LoginAPIView(generics.GenericAPIView):
     # http://127.0.0.1:8000/account/login/
     serializer_class = LoginSerializer
@@ -79,11 +81,11 @@ class AccountListAPIView(generics.ListAPIView):
 
 
 class MyAccountAPIView(generics.RetrieveUpdateAPIView):
-    # http://127.0.0.1:8000/account/login/{phone}/
+    # http://127.0.0.1:8000/account/login/{phone_number}/
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     permission_classes = (IsOwnUserOrReadOnly, IsAuthenticated)
-    lookup_field = 'phone'
+    lookup_field = 'phone_number'
 
 
 class AccountOwnImageUpdateView(generics.RetrieveUpdateAPIView):

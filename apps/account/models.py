@@ -24,13 +24,25 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, phone_number, password=None, **extra_fields):
-        user = self.model(phone_number=phone_number, first_name=first_name,
-                          last_name=last_name, password=make_password(password))
-        user.is_superuser = True
-        user.is_staff = True
-        user.is_sponsor = True
-        user.is_active = True
+    def create_superuser(self, email, first_name, last_name, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            **extra_fields
+        )
+
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -47,7 +59,7 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     username = models.CharField(
         max_length=255, blank=True, null=True, unique=True, verbose_name='Phone',
     )
-    phone_number = PhoneNumberField(region='UZ',  verbose_name='Phone number')
+    phone_number = PhoneNumberField(region='UZ', verbose_name='Phone number', unique=True)
     email = models.EmailField(
         max_length=255, blank=True, null=True, unique=True, verbose_name='Email',
     )
@@ -57,6 +69,7 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_superuser = models.BooleanField(default=False, verbose_name='Superuser')
     is_staff = models.BooleanField(default=False, verbose_name='Admin')
     is_active = models.BooleanField(default=True)
+    is_author = models.BooleanField(default=False)
     date_login = models.DateTimeField(auto_now=True, verbose_name='Date login')
     date_created = models.DateTimeField(
         auto_now_add=True, verbose_name='Date created',
@@ -64,8 +77,8 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     class Meta:
         verbose_name = 'User'
@@ -82,6 +95,11 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
             'access': str(refresh.access_token),
         }
         return data
+
+    @property
+    def get_wishlist(self):
+        wishlist = self.wishlist_set.filter(user=self).values()
+        return list(wishlist)
 
 
 class UserProfile(BaseModel):
@@ -115,18 +133,18 @@ class PurchasedCourse(BaseModel):
     lessons_video_count = models.PositiveIntegerField(default=0)
     viewed_video_count = models.PositiveIntegerField(default=0)
     is_finished = models.BooleanField(default=True)
+
     def __str__(self):
         return self.course.title
-
-
 
     class Meta:
         verbose_name = 'Purchase Course'
         verbose_name_plural = 'Purchase Courses'
 
+
 def purchase_course_post_save(instance, sender, *args, **kwargs):
     if instance is not None:
-        obj = CourseLesson.objects.filter(course__id = instance.course.id).aggregate(Sum('video_count'))
+        obj = CourseLesson.objects.filter(course__id=instance.course.id).aggregate(Sum('video_count'))
         instance.lessons_video_count = obj.get('video_count__sum')
 
 

@@ -10,7 +10,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6, max_length=128, write_only=True)
     password2 = serializers.CharField(min_length=6, max_length=128, write_only=True)
 
-
     class Meta:
         model = Account
         fields = ['email', 'first_name', 'password', 'password2']
@@ -33,6 +32,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['token']
+
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, required=True)
@@ -73,15 +73,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    gender = serializers.CharField(source='get_gender_display')
-
     class Meta:
         model = Account
         fields = (
             'id',
             'username',
             'phone_number',
-            'gender',
+            'get_wishlist',
             'date_login',
             'date_created',
 
