@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from apps.library.models import Category, Book, Wishlist
+from apps.library.models import Category, Book, Wishlist, PromoCode, Order, CheckOut
 
 
 @admin.register(Category)
@@ -45,9 +45,32 @@ class WishlistModelAdmin(ModelAdmin):
     fields = ('book', 'user')
     ordering = ('id',)
 
-# @admin.register(PromoCode)
-# class PromoCodeAdmin(ModelAdmin):
-#     fields = ('code', 'discount', 'expiry_date')
-#     list_display = ('code', 'discount', 'expiry_date')
-#
-#
+
+@admin.register(PromoCode)
+class PromoCodeAdmin(ModelAdmin):
+    fields = ('code', 'discount', 'expiry_date')
+    list_display = ('code', 'discount', 'expiry_date')
+
+
+@admin.register(Order)
+class OrderModelAdmin(ModelAdmin):
+    fields = ('book', 'quantity', 'user', 'promo_code')
+    list_display = ('book_title', 'quantity', 'user_first_name', 'get_total', 'get_discounted_total')
+    ordering = ('id',)
+
+    def book_title(self, obj):
+        return obj.book.title
+
+    book_title.admin_order_field = 'book__title'
+
+    def user_first_name(self, obj):
+        return obj.user.first_name
+
+    user_first_name.short_description = 'User'
+
+
+@admin.register(CheckOut)
+class CheckOutModelAdmin(ModelAdmin):
+    fields = ('order', 'full_name', 'phone_number', 'email', 'status')
+    list_display = ('id', 'order', 'full_name', 'phone_number', 'status', 'order_number')
+    ordering = ('id',)

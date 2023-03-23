@@ -127,6 +127,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'username',
             'phone_number',
             'get_wishlist',
+            'get_orders',
             'date_login',
             'date_created',
 

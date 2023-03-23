@@ -7,8 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.library.api.v1.serializers import ListBookModelSerializer, RetrieveBookModelSerializer, \
-    CreateWishlistModelSerializer
-from apps.library.models import Book, Wishlist
+    CreateWishlistModelSerializer, CreateOrderModelSerializer, CreateCheckOutModelSerializer, \
+    RetrieveCheckOutModelSerializer
+from apps.library.models import Book, Wishlist, Order, CheckOut
 
 
 class ListBookAPIView(ListAPIView):
@@ -42,3 +43,31 @@ class CreateWishlistAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CreateOrderAPIView(CreateAPIView):
+    serializer_class = CreateOrderModelSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CreateCheckOutAPIView(CreateAPIView):
+    queryset = CheckOut.objects.all()
+    serializer_class = CreateCheckOutModelSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class RetrieveCheckOutAPIVIew(RetrieveAPIView):
+    queryset = CheckOut.objects.all()
+    serializer_class = RetrieveCheckOutModelSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'order_number'
