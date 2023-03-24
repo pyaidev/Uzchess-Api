@@ -19,12 +19,24 @@ def get_timer(length: float, type: str = 'long'):
             return f"{f'0{int(m)}' if m < 10 else m}:{f'0{round(s)}' if s < 10 else round(s)}"
 
 
+def randomize_certificate_number():
+    from apps.course.models import Certificate
+
+    cids = Certificate.objects.values_list("cid", flat=True)
+    while True:
+        random_cid = "".join(random.choice(string.digits + string.ascii_uppercase) for _ in range(7))
+        if random_cid not in cids:
+            return random_cid
+
+
 def certificaty(name, course):
+    from apps.course.models import Certificate
     cert_template = Image.open("././././static/shablon/1.jpg")
     font = ImageFont.load_default()
     font_style = ImageFont.truetype("././././static/fonts/Roboto/Roboto-BoldItalic.ttf", 40)
 
     draw = ImageDraw.Draw(cert_template)
+
 
     date = f'Data: {time.strftime("%d/%m/%Y")}'
 
@@ -43,9 +55,6 @@ def certificaty(name, course):
     cert_template.save(f"././././static/certicats/{name}-{course}.jpg")
 
     return f"././././static/certicats/{name}-{course}.jpg"
-
-
-
 
 # def randomize_certificate_number():
 #     from apps.course.models import Certificate

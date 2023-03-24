@@ -1,7 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.views import APIView
 
 from apps.accounts.models import PurchasedCourse
 from apps.course.models import Course, CourseLesson, CourseVideo, Category, CourseCompleted, \
@@ -182,7 +184,7 @@ class GenerateCerificateView(generics.CreateAPIView):
     serializer_class = CertificateSerializerGet
     permission_classes = (IsAuthenticated,)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request,  *args, **kwargs):
         user = request.user
         course = request.data.get('course')
         # print(request.data)
@@ -191,9 +193,22 @@ class GenerateCerificateView(generics.CreateAPIView):
             if len(Certificate.objects.filter(user_id=user.id, course_id=course)) == 0:
                 obj = Certificate.objects.create(user_id=user.id, course_id=course)
                 obj.save()
-                # print(user, qs.course)
+                cid = request.data.get('cid')
+                print(cid)
                 certificaty(str(user), str(qs.course))
                 serizalizer = self.get_serializer(obj).data
                 return Response(serizalizer)
             return Response({"message": "Sertifikat mavjud"})
         return Response({'Error': "Kurslar to'liq ko'rilmagan!"})
+
+
+class CertificateListView(generics.ListAPIView):
+    queryset = Certificate.objects.all()
+    serializer_class = CertificateSerializerGet
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = CertificateSerializerGet(queryset, many=True)
+        return Response(serializer.data)
+

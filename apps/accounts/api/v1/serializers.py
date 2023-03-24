@@ -11,6 +11,8 @@ from apps.accounts.models import Account, UserProfile
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, smart_bytes, force_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6, max_length=128, write_only=True)
     password2 = serializers.CharField(min_length=6, max_length=128, write_only=True)
@@ -67,6 +69,7 @@ class LoginSerializer(serializers.ModelSerializer):
         }
         return data
 
+
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(min_length=2)
 
@@ -105,12 +108,6 @@ class SetNewPasswordSerializer(serializers.Serializer):
         except Exception as e:
             raise AuthenticationFailed('The reset link is invalid', 401)
         return super().validate(attrs)
-
-
-
-
-
-
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

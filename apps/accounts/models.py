@@ -138,7 +138,8 @@ class PurchasedCourse(BaseModel):
     user = models.ForeignKey('accounts.Account', on_delete=models.CASCADE)
     lessons_video_count = models.PositiveIntegerField(default=0)
     viewed_video_count = models.PositiveIntegerField(default=0)
-    is_finished = models.BooleanField(default=True)
+    is_finished = models.BooleanField(default=False)
+
     def __str__(self):
         return self.course.title
 

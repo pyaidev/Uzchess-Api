@@ -7,7 +7,7 @@ from apps.common.models import BaseModel
 from .choosen import COURSE_LEVEL, SECTION_TYPE
 from mutagen.mp4 import MP4, MP4StreamInfoError
 
-from helpers.utils import get_timer
+from helpers.utils import get_timer, randomize_certificate_number
 
 
 class Category(BaseModel):
@@ -25,7 +25,7 @@ class Course(BaseModel):
     description = RichTextField()
     demo_video = models.FileField()
     author = models.CharField('Author', max_length=150)
-    price = models.DecimalField(default=0, max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     slug = models.SlugField(unique=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     language = models.CharField(max_length=60)
@@ -67,7 +67,7 @@ class CourseLesson(BaseModel):
 
 
 class CourseVideo(BaseModel):
-    course = models.ForeignKey('course.CourseLesson', on_delete=models.CASCADE)
+    course = models.ForeignKey('course.CourseLesson', on_delete=models.CASCADE, verbose_name='Lesson')
     title = models.CharField(max_length=80)
     video = models.FileField()
     slug = models.SlugField(unique=True, blank=True)
@@ -150,7 +150,7 @@ class Certificate(BaseModel):
     course = models.ForeignKey(
         'course.Course', on_delete=models.CASCADE, related_name='certificates',
     )
-    # cid = models.CharField(max_length=255, default=randomize_certificate_number)
+    cid = models.CharField(max_length=255, default=randomize_certificate_number)
     certificate_url = models.CharField(max_length=255, null=True, blank=True)
 
     def save(self, *args, **kwargs):

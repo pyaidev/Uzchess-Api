@@ -2,8 +2,6 @@ from django.contrib import admin
 from .models import Course, CourseLesson, CourseVideo, Category, CourseCompleted, CourseComment, Certificate
 
 
-
-
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'author', 'price', 'is_discount', 'discount_price', 'language',)
     list_filter = ('title', 'author', 'price', 'is_discount', 'discount_price',)
@@ -32,10 +30,15 @@ class CourseCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'course', 'cid', 'created_at')
+    list_filter = ('course',)
+
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseLesson, CourseLessonAdmin)
 admin.site.register(CourseVideo, CourseVideoAdmin)
 admin.site.register(Category, CourseCategoryAdmin)
+admin.site.register(Certificate, CertificateAdmin)
 admin.site.register(CourseCompleted)
 admin.site.register(CourseComment)
-admin.site.register(Certificate)

@@ -110,7 +110,7 @@ class CertificateSerializerGet(serializers.ModelSerializer):
     # purchase_course = serializers.
     class Meta:
         model = Certificate
-        fields = ('id', 'user', 'course', 'certificate_url')
+        fields = ('id', 'user', 'course', 'cid', 'certificate_url')
         read_only_fields =("certificate_url",)
 
 
