@@ -108,6 +108,7 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
         return list(wishlist)
 
 
+
 class UserProfile(BaseModel):
     """ User profile model """
     user = models.OneToOneField(
