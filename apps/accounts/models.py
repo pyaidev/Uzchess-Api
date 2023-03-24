@@ -12,6 +12,7 @@ from apps.common.models import BaseModel
 
 from .choosen import GENDER
 from ..course.models import Course, CourseLesson
+from ..library.models import CheckOut
 
 
 class AccountManager(BaseUserManager):
@@ -101,6 +102,15 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
             'access': str(refresh.access_token),
         }
         return data
+
+    @property
+    def get_orders(self):
+        orders = CheckOut.objects.filter(order__user=self).values('order_number',
+                                                                  'order__checkout__status',
+                                                                  'order__book__title',
+                                                                  'order__book__image')
+
+        return list(orders)
 
     @property
     def get_wishlist(self):
