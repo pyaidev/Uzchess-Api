@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.accounts.models import PurchasedCourse
 from apps.course.models import Course, CourseLesson, CourseVideo, Category, CourseCompleted, \
     CourseComment, Certificate
 
@@ -87,6 +88,15 @@ class CompletedCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseCompleted
         fields = ('user_id', 'course_id')
+
+class PurchasCourseUpdate(serializers.ModelSerializer):
+    video_plus = serializers.IntegerField(required=False)
+    class Meta:
+        model = PurchasedCourse
+        exclude = ('id', 'user','course','lessons_video_count',"viewed_video_count","is_finished")
+        read_only_fields = ('id', 'user','course','lessons_video_count',"viewed_video_count","video_plus",)
+
+
 
 
 class CourseCommentSerializer(serializers.ModelSerializer):

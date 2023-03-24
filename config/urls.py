@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('account/', include('apps.accounts.api.urls')),
-    # path('social_auth/', include('apps.social_auth.api.urls')),
+    path('social_auth/', include('apps.social_auth.api.urls')),
     path('course/', include('apps.course.api.urls')),
     path('library/', include('apps.library.api.urls')),
     path('news/', include('apps.news.api.urls')),

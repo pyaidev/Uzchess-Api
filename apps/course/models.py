@@ -154,7 +154,7 @@ class Certificate(BaseModel):
     certificate_url = models.CharField(max_length=255, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.certificate_url = f'/home/nurmuhammad/uic/uzchess/static/certicats/{self.user}-{self.course.title}.jpg'
+        self.certificate_url = f'http://127.0.0.1:8000/static/certicats/{self.user}-{self.course.title}.jpg'
         super().save(*args, **kwargs)
 
     class Meta:

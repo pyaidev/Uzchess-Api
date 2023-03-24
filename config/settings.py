@@ -47,6 +47,13 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "ckeditor",
     "ckeditor_uploader",
+    "dj_rest_auth",
+    "allauth",
+    "allauth.account",
+    "dj_rest_auth.registration",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+
 ]
 
 
@@ -152,13 +159,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_FROM = "mashrapov3030@gmail.com"
-EMAIL_HOST_USER = "mashrapov3030@gmail.com"
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-PASSWORD_RESET_TIMEOUT = 14400
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+PASSWORD_RESET_TIMEOUT = os.environ.get('PASSWORD_RESET_TIMEOUT')
 
 
 auth_list = [

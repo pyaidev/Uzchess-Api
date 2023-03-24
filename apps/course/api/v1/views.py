@@ -8,13 +8,12 @@ from apps.course.models import Course, CourseLesson, CourseVideo, Category, Cour
     CourseComment, CourseViewed, Certificate
 from helpers.utils import certificaty
 
-from .serializers import CategoryListSerializer, CertificateSerializerGet, VideoSingleSerializer
+from .serializers import CategoryListSerializer, CertificateSerializerGet, VideoSingleSerializer, PurchasCourseUpdate
 from .serializers import CourseListSerializer
 from .serializers import CourseVideoSerializer
 from .serializers import CourseLessonSerializer
 from .serializers import CourseCommentSerializer
 from .serializers import CompletedCourseSerializer
-
 
 
 class CategoryListAPIView(generics.ListAPIView):
@@ -59,6 +58,7 @@ class CourseListView(generics.ListAPIView):
         serializer = CourseListSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
 class CourseLessonsView(generics.ListAPIView):
     serializer_class = CourseLessonSerializer
     permission_classes = [IsAuthenticated]
@@ -100,8 +100,6 @@ class LessonVideoListView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-
-
 class VideoSingleView(generics.RetrieveAPIView):
     queryset = CourseVideo.objects.all()
 
@@ -128,11 +126,31 @@ class VideoSingleView(generics.RetrieveAPIView):
 
         return CourseVideo.objects.none()
 
-    def get(self, request, *args, **kwargs):
-        if queryset := self.get_queryset():
-            serializer = VideoSingleSerializer(queryset)
-            return Response(serializer.data)
-        return Response("You are not buy this course")
+
+class PurchaseUpdate(generics.UpdateAPIView):
+    queryset = PurchasedCourse.objects.all()
+    serializer_class = PurchasCourseUpdate
+
+    lookup_field = 'pk'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print()
+        instance.viewed_video_count += 1
+        instance.save()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response({"message": "failed", "details": serializer.errors})
+        serializer.save()
+        return Response({"message": "updated successfully"})
+
+
+def get(self, request, *args, **kwargs):
+    if queryset := self.get_queryset():
+        serializer = VideoSingleSerializer(queryset)
+        return Response(serializer.data)
+    return Response("You are not buy this course")
 
 
 class CourseCommentListAPIView(generics.ListAPIView):

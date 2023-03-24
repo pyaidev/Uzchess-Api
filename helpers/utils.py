@@ -20,9 +20,9 @@ def get_timer(length: float, type: str = 'long'):
 
 
 def certificaty(name, course):
-    cert_template = Image.open("/home/nurmuhammad/uic/uzchess/static/shablon/1.jpg")
+    cert_template = Image.open("././././static/shablon/1.jpg")
     font = ImageFont.load_default()
-    font_style = ImageFont.truetype("/home/nurmuhammad/uic/ayoluchun.uz/static/fonts/Roboto/Roboto-BoldItalic.ttf", 40)
+    font_style = ImageFont.truetype("././././static/fonts/Roboto/Roboto-BoldItalic.ttf", 40)
 
     draw = ImageDraw.Draw(cert_template)
 
@@ -40,9 +40,9 @@ def certificaty(name, course):
     draw.text(date_pos, date, font=font_style, fill='black')
     draw.text(congart_pos, congart, font=font_style, fill='black')
 
-    cert_template.save(f"/home/nurmuhammad/uic/uzchess/static/certicats/{name}-{course}.jpg")
+    cert_template.save(f"././././static/certicats/{name}-{course}.jpg")
 
-    return f"/home/nurmuhammad/uic/uzchess/static/certicats/{name}-{course}.jpg"
+    return f"././././static/certicats/{name}-{course}.jpg"
 
 
 
