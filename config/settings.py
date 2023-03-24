@@ -6,7 +6,6 @@ from .jazzmin import JAZZMIN_SETTINGS
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -17,7 +16,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
 
 DJANGO_APPS = [
     "jazzmin",
@@ -91,7 +89,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -105,7 +102,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
-
 
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 # AUTH_USER_MODEL = 'account.Account'
@@ -130,7 +126,7 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
-    # Internationalization
+# Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -141,7 +137,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -151,9 +146,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -189,7 +181,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
@@ -199,7 +190,6 @@ SWAGGER_SETTINGS = {
         },
     },
 }
-
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -235,7 +225,6 @@ SIMPLE_JWT = {
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 
-
 SITE_ID = 1
 
 # Provider specific settings
@@ -251,7 +240,6 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',

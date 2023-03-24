@@ -36,6 +36,7 @@ urlpatterns = [
     path('social_auth/', include('apps.social_auth.api.urls')),
     path('course/', include('apps.course.api.urls')),
     path('library/', include('apps.library.api.urls')),
+    path('main/', include('apps.main.api.urls')),
     path('news/', include('apps.news.api.urls')),
     path('payment/', include('apps.payment.api.urls')),
 ]
