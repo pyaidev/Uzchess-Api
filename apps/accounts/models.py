@@ -155,3 +155,6 @@ def purchase_course_post_save(instance, sender, *args, **kwargs):
 
 
 pre_save.connect(purchase_course_post_save, sender=PurchasedCourse)
+
+
+
