@@ -105,10 +105,13 @@ class Account(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     @property
     def get_orders(self):
-        orders = CheckOut.objects.filter(order__user=self).values('order_number',
-                                                                  'order__checkout__status',
-                                                                  'order__book__title',
-                                                                  'order__book__image')
+        orders = CheckOut.objects.filter(order__user=self).values(
+            'order_number',
+            'order__checkout__status',
+            'order__book__title',
+            'order__book__image'
+
+        )
 
         return list(orders)
 
