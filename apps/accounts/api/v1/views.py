@@ -1,21 +1,25 @@
 import jwt
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.encoding import smart_bytes, DjangoUnicodeDecodeError, smart_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status, views
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from apps.accounts.models import Account
+from apps.accounts.models import Account, PurchasedCourse
 from config import settings
 from .permissions import IsOwnUserOrReadOnly
 from .serializers import RegisterSerializer, LoginSerializer, UserImageUpdateSerializer, AccountSerializer, \
     EmailVerificationSerializer, ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer
 from .utils import Util
+from ...utils import export_data_excel
 
 
 class AccountRegisterAPIView(generics.GenericAPIView):
@@ -35,7 +39,7 @@ class AccountRegisterAPIView(generics.GenericAPIView):
         relativeLink = reverse('verify-email')
         absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
         print(absurl)
-        absurl = 'http://' + current_site+relativeLink+"?token="+str(token)
+        absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
         # print(absurl)
         email_body = absurl
         data = {'email_body': email_body, 'to_email': user.email,
@@ -105,8 +109,6 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
 
 
-
-
 class SetNewPasswordAPIView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
 
@@ -114,9 +116,6 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
-
-
-
 
 
 class AccountListAPIView(generics.ListAPIView):
@@ -155,3 +154,18 @@ class AccountOwnImageUpdateView(generics.RetrieveUpdateAPIView):
             serializer.save()
             return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
         return Response({'success': False, 'message': 'Credentials is invalid'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ExportPurchasedCoursesXlsxView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        columns = ['ID', 'Course', 'User', 'Lessons Vide Count', 'Viewed Video Count', 'Is Finished']
+        rows = PurchasedCourse.objects.values_list(
+            'id', 'course__title', 'user__first_name', 'lessons_video_count', 'viewed_video_count', 'is_finished'
+        )
+
+        file_name = 'purchased_course_list'
+        response = export_data_excel(columns, rows, file_name)
+
+        return response

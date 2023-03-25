@@ -147,16 +147,16 @@ class PurchaseUpdate(generics.UpdateAPIView):
         serializer.save()
         return Response({"message": "updated successfully"})
 
-
-def get(self, request, *args, **kwargs):
-    if queryset := self.get_queryset():
-        serializer = VideoSingleSerializer(queryset)
-        return Response(serializer.data)
-    return Response("You are not buy this course")
+    def get(self, request, *args, **kwargs):
+        if queryset := self.get_queryset():
+            serializer = VideoSingleSerializer(queryset)
+            return Response(serializer.data)
+        return Response("You are not buy this course")
 
 
 class CourseCommentListAPIView(generics.ListAPIView):
     queryset = CourseComment.objects.all()
+
     serializer_class = CourseCommentSerializer
     permission_classes = [IsAuthenticated]
 
@@ -184,7 +184,7 @@ class GenerateCerificateView(generics.CreateAPIView):
     serializer_class = CertificateSerializerGet
     permission_classes = (IsAuthenticated,)
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         user = request.user
         course = request.data.get('course')
         # print(request.data)
@@ -211,4 +211,3 @@ class CertificateListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = CertificateSerializerGet(queryset, many=True)
         return Response(serializer.data)
-

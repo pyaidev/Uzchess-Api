@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .views import AccountRegisterAPIView, AccountListAPIView, MyAccountAPIView, LoginAPIView, \
-    AccountOwnImageUpdateView, VerifyEmail, RequestPasswordResetEmail, SetNewPasswordAPIView
+    AccountOwnImageUpdateView, VerifyEmail, RequestPasswordResetEmail, SetNewPasswordAPIView, \
+    ExportPurchasedCoursesXlsxView
 
 urlpatterns = [
     path('register/', AccountRegisterAPIView.as_view()),
@@ -16,5 +17,5 @@ urlpatterns = [
     path('profiles/', AccountListAPIView.as_view()),
     path('profile/<str:phone_number>/', MyAccountAPIView.as_view()),
     path('image-update/<int:pk>/', AccountOwnImageUpdateView.as_view()),
+    path('purchased/course/export/', ExportPurchasedCoursesXlsxView.as_view(), name='export_data')
 ]
-

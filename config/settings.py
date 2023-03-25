@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth",
     "allauth",
     "allauth.account",
+    'import_export',
     "dj_rest_auth.registration",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
