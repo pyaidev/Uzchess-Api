@@ -104,6 +104,7 @@ DATABASES = {
     }
 }
 
+
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 # AUTH_USER_MODEL = 'account.Account'
 AUTH_PASSWORD_VALIDATORS = [
